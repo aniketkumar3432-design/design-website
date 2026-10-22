@@ -18,8 +18,8 @@ const services = [
   { icon: "🎨", title: "Graphic Design", text: "Creative visuals, posters, flyers and brochures that communicate your message clearly." },
   { icon: "✨", title: "Logo Design", text: "Unique and memorable logos that reflect your brand and leave a lasting impression." },
 ];
-// Portfolio cards follow the services list. Dummy titles for now: replace with real projects later
-const portfolio = services.map((s) => ({ icon: s.icon, cat: s.title, title: "Sample Project (coming soon)" }));
+// Dummy portfolio placeholders: replace with your real projects later
+const portfolio = [1, 2, 3, 4, 5, 6].map((n) => ({ icon: "🖼️", cat: "Category", title: "Project " + String(n).padStart(2, "0") }));
 const steps = [
   { n: "01", title: "Discover", text: "We learn your business, audience and goals." },
   { n: "02", title: "Strategy", text: "A clear plan with channels, content and budget." },
@@ -115,11 +115,12 @@ input,textarea,select{padding:13px 14px;border:1px solid var(--line);border-radi
 input:focus,textarea:focus,select:focus{outline:2px solid var(--blue);border-color:transparent}
 .about{background:radial-gradient(circle at 80% 20%,#2563eb55,transparent 45%),linear-gradient(135deg,#0b1220,#172554)}
 .about h2{color:var(--red2)}.about p.txt{color:#e2e8f0;max-width:780px;font-size:1.1rem}
-.work{position:relative;height:220px;border-radius:16px;display:flex;flex-direction:column;justify-content:flex-end;padding:22px;border:1px solid #ffffff1f;background:linear-gradient(135deg,#172554,#0b1220);transition:.25s;overflow:hidden}
+.work{position:relative;min-height:240px;border-radius:16px;display:flex;flex-direction:column;justify-content:flex-end;padding:22px;border:1px solid #ffffff1f;background:linear-gradient(135deg,#172554,#0b1220);transition:.25s;overflow:hidden}
 .work:hover{transform:translateY(-6px);border-color:var(--red);box-shadow:0 16px 36px rgba(220,38,38,.25)}
 .work .ic{position:absolute;top:18px;right:20px;font-size:2.4rem}
 .work span{color:#f87171;font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-.work h3{color:#fff}
+.work h3{color:#fff;margin-bottom:6px}
+.work p{color:var(--muted);font-size:.9rem}
 .hp{position:absolute;left:-9999px}
 .ok{background:#dcfce7;color:#166534;padding:22px;border-radius:12px;font-weight:600}
 .err{color:#b91c1c;font-size:.9rem}
@@ -251,10 +252,10 @@ export default function App() {
         <div className="container">
           <Reveal><div className="tag">What we do</div><h2>Services built for growth</h2>
             <p className="sub">Everything you need to get found online and turn visitors into customers.</p></Reveal>
-          <div className="grid g3">
+          <div className="grid g4">
             {services.map((s) => (
-              <Reveal key={s.title}><div className="card">
-                <div className="icon">{s.icon}</div><h3>{s.title}</h3><p>{s.text}</p>
+              <Reveal key={s.title}><div className="work">
+                <div className="ic">{s.icon}</div><span>Service</span><h3>{s.title}</h3><p>{s.text}</p>
               </div></Reveal>
             ))}
           </div>
@@ -265,7 +266,7 @@ export default function App() {
         <div className="container">
           <Reveal><div className="tag">Portfolio</div><h2>Our recent work</h2>
             <p className="sub">A glimpse of the creatives, campaigns and designs we have delivered.</p></Reveal>
-          <div className="grid g4">
+          <div className="grid g3">
             {portfolio.map((p) => (
               <Reveal key={p.title}><div className="work">
                 <div className="ic">{p.icon}</div><span>{p.cat}</span><h3>{p.title}</h3>
