@@ -18,15 +18,8 @@ const services = [
   { icon: "🎨", title: "Graphic Design", text: "Creative visuals, posters, flyers and brochures that communicate your message clearly." },
   { icon: "✨", title: "Logo Design", text: "Unique and memorable logos that reflect your brand and leave a lasting impression." },
 ];
-// Portfolio items: replace with your real projects (add images later if you like)
-const portfolio = [
-  { icon: "🎨", cat: "Social Media", title: "Brand Social Creatives" },
-  { icon: "✨", cat: "Logo Design", title: "Logo & Identity Set" },
-  { icon: "🎯", cat: "Ads", title: "Meta & Google Ad Campaign" },
-  { icon: "🖼️", cat: "Poster", title: "Event Banner & Poster" },
-  { icon: "📘", cat: "Brochure", title: "Corporate Brochure" },
-  { icon: "💻", cat: "Web & App", title: "Website UI Design" },
-];
+// Portfolio cards follow the services list. Dummy titles for now: replace with real projects later
+const portfolio = services.map((s) => ({ icon: s.icon, cat: s.title, title: "Sample Project (coming soon)" }));
 const steps = [
   { n: "01", title: "Discover", text: "We learn your business, audience and goals." },
   { n: "02", title: "Strategy", text: "A clear plan with channels, content and budget." },
@@ -272,7 +265,7 @@ export default function App() {
         <div className="container">
           <Reveal><div className="tag">Portfolio</div><h2>Our recent work</h2>
             <p className="sub">A glimpse of the creatives, campaigns and designs we have delivered.</p></Reveal>
-          <div className="grid g3">
+          <div className="grid g4">
             {portfolio.map((p) => (
               <Reveal key={p.title}><div className="work">
                 <div className="ic">{p.icon}</div><span>{p.cat}</span><h3>{p.title}</h3>
