@@ -102,6 +102,29 @@ header.scrolled{box-shadow:0 4px 18px rgba(15,23,42,.08)}
 .hero-stats div b{display:block;font-size:1.8rem;color:var(--ink);line-height:1.1}
 .hero-stats div span{font-size:.92rem;color:var(--muted)}
 
+/* Hero animated overlay */
+.fx{position:absolute;inset:0;z-index:1;pointer-events:none}
+.fx>*{position:absolute;animation:fxIn .8s ease-out var(--d,0s) both,fxFloat var(--t,5s) ease-in-out calc(var(--d,0s) + .8s) infinite}
+@keyframes fxIn{from{opacity:0;transform:translateY(22px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes fxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.fcard{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.93);border:1px solid #fff;border-radius:14px;padding:11px 18px 11px 12px;box-shadow:0 14px 32px rgba(15,23,42,.13);backdrop-filter:blur(6px)}
+.fcard .fi{width:38px;height:38px;border-radius:10px;background:var(--redsoft);display:grid;place-items:center;font-size:1.15rem}
+.fcard small{display:block;font-size:.82rem;color:var(--muted);line-height:1.1}
+.fcard b{font-size:1.4rem;color:var(--ink);line-height:1.15}
+.fcard b i{font-style:normal;color:#16a34a;font-size:.9rem;margin-left:5px}
+.spark{width:46px;height:22px;margin-left:4px}
+.spark path{fill:none;stroke:#16a34a;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:80;animation:draw 4s ease-in-out infinite}
+@keyframes draw{0%{stroke-dashoffset:80}55%,100%{stroke-dashoffset:0}}
+.soc{width:54px;height:54px;border-radius:14px;box-shadow:0 10px 24px rgba(15,23,42,.2);background:#fff}
+.soc svg{width:100%;height:100%;display:block;border-radius:14px}
+.ai{width:72px;height:72px;display:grid;place-items:center}
+.ai .ring{position:absolute;inset:0;border:2px dashed var(--red);border-radius:50%;opacity:.7;animation:spin 14s linear infinite}
+.ai .core{width:52px;height:52px;border-radius:14px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:1.3rem;animation:pulse 2.4s infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(220,38,38,.5)}70%{box-shadow:0 0 0 18px rgba(220,38,38,0)}100%{box-shadow:0 0 0 0 rgba(220,38,38,0)}}
+@media(max-width:900px){.fx{display:none}}
+@media(prefers-reduced-motion:reduce){.fx>*,.fx *{animation:none!important}}
+
 /* Marquee */
 .marquee{background:var(--redsoft);color:var(--red2);overflow:hidden;white-space:nowrap;padding:15px 0;font-size:.95rem;border-top:1px solid #fecaca;border-bottom:1px solid #fecaca}
 .marquee div{display:inline-block;animation:scroll 28s linear infinite}
@@ -214,6 +237,60 @@ function Counter({ to, suffix }) {
   return <b ref={ref}>{v}{suffix}</b>;
 }
 
+const SOCIALS = [
+  { k: "ig", l: "48%", t: "30%", d: ".5s", tt: "5s", svg: (
+    <svg viewBox="0 0 48 48"><defs><linearGradient id="igrad" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#feda75"/><stop offset=".35" stopColor="#fa7e1e"/><stop offset=".6" stopColor="#d62976"/><stop offset="1" stopColor="#4f5bd5"/></linearGradient></defs><rect width="48" height="48" fill="url(#igrad)"/><rect x="12" y="12" width="24" height="24" rx="7" fill="none" stroke="#fff" strokeWidth="3"/><circle cx="24" cy="24" r="6" fill="none" stroke="#fff" strokeWidth="3"/><circle cx="31.5" cy="16.5" r="1.8" fill="#fff"/></svg>) },
+  { k: "fb", l: "53%", t: "23%", d: ".7s", tt: "6s", svg: (
+    <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#1877f2"/><path d="M26.5 40V26h4.6l.8-5.4h-5.4v-3.5c0-1.6.8-2.8 3-2.8h2.5V9.7c-.5-.1-2.200-.3-4-.3-4.200 0-6.900 2.500-6.900 7v4H16V26h4.100v14z" fill="#fff"/></svg>) },
+  { k: "yt", l: "56%", t: "38%", d: ".9s", tt: "5.5s", svg: (
+    <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#ff0000"/><polygon points="19,15 19,33 34,24" fill="#fff"/></svg>) },
+  { k: "ads", l: "49%", t: "44%", d: "1.1s", tt: "6.5s", svg: (
+    <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#fff"/><path d="M19 9 7 31l7 4 12-22z" fill="#fbbc04"/><path d="M29 9l12 22-7 4-12-22z" fill="#4285f4"/><circle cx="11" cy="37" r="5" fill="#34a853"/></svg>) },
+  { k: "li", l: "53%", t: "52%", d: "1.3s", tt: "5s", svg: (
+    <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#0a66c2"/><text x="24" y="33" fontSize="23" fontWeight="700" fill="#fff" textAnchor="middle" fontFamily="Arial,sans-serif">in</text></svg>) },
+];
+
+function CountUp({ to, decimals = 0, prefix = "", suffix = "", delay = 700 }) {
+  const [v, setV] = useState(0);
+  useEffect(() => {
+    let raf;
+    const timer = setTimeout(() => {
+      const t0 = performance.now();
+      const tick = (t) => {
+        const p = Math.min((t - t0) / 1800, 1);
+        setV(to * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    }, delay);
+    return () => { clearTimeout(timer); cancelAnimationFrame(raf); };
+  }, [to, delay]);
+  return <>{prefix}{v.toFixed(decimals)}{suffix}</>;
+}
+
+function HeroFX() {
+  const Spark = () => <svg className="spark" viewBox="0 0 46 22"><path d="M2 19 L12 12 L20 15 L32 6 L44 2" /></svg>;
+  return (
+    <div className="fx" aria-hidden="true">
+      <div className="fcard" style={{ left: "50%", top: "7%", "--d": ".2s", "--t": "6s" }}>
+        <div className="fi">📈</div><div><small>Website Traffic</small><b><CountUp to={248} prefix="+" suffix="%" /></b></div><Spark />
+      </div>
+      <div className="fcard" style={{ right: "12%", top: "9%", "--d": ".4s", "--t": "5.5s" }}>
+        <div className="fi">👥</div><div><small>Leads Generated</small><b><CountUp to={320} prefix="+" suffix="%" /></b></div><Spark />
+      </div>
+      <div className="fcard" style={{ right: "2%", top: "27%", "--d": ".6s", "--t": "6.5s" }}>
+        <div className="fi">💰</div><div><small>Revenue Growth</small><b><CountUp to={4.8} decimals={1} prefix="+" suffix="%" /></b></div><Spark />
+      </div>
+      {SOCIALS.map((x) => (
+        <div key={x.k} className="soc" style={{ left: x.l, top: x.t, "--d": x.d, "--t": x.tt }}>{x.svg}</div>
+      ))}
+      <div className="ai" style={{ right: "9%", top: "45%", "--d": "1.5s", "--t": "7s" }}>
+        <span className="ring"></span><span className="core">AI</span>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -263,6 +340,7 @@ export default function App() {
       </header>
 
       <section className="hero" id="top">
+        <HeroFX />
         <div className="container">
           <div className="hero-copy">
             <span className="pill">🚀 Helping brands grow smarter, faster and stronger</span>
