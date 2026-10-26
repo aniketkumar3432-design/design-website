@@ -63,7 +63,7 @@ const testimonials = [
 ];
 
 const css = `
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Caveat:wght@700&display=swap');
 :root{
   --red:#dc2626;--red2:#b91c1c;--redsoft:#fef2f2;
   --ink:#0f172a;--text:#1e293b;--muted:#475569;
@@ -90,7 +90,8 @@ header.scrolled{box-shadow:0 4px 18px rgba(15,23,42,.08)}
 .tagline{color:var(--ink);font-size:.65rem;letter-spacing:.22em;margin-top:6px}
 .links{display:flex;gap:26px;align-items:center;font-size:.95rem}
 .links a:not(.btn):hover{color:var(--red)}
-.links a.active{color:var(--red)}
+.links a.active{color:var(--red);position:relative}
+.links a.active::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:2px;background:var(--red)}
 .btn{display:inline-block;background:var(--red);color:#fff!important;padding:8px 18px;border-radius:8px;border:1.5px solid var(--red);cursor:pointer;font-size:.9rem;transition:.2s}
 .btn:hover{background:var(--red2);border-color:var(--red2);transform:translateY(-2px);box-shadow:0 8px 20px rgba(220,38,38,.28)}
 .btn.ghost{background:#fff;color:var(--ink)!important;border:1.5px solid var(--ink)}
@@ -99,13 +100,20 @@ header.scrolled{box-shadow:0 4px 18px rgba(15,23,42,.08)}
 .menu{display:none;background:none;border:0;font-size:1.5rem;cursor:pointer;color:var(--ink)}
 .btn:focus-visible,a:focus-visible,button:focus-visible{outline:3px solid #fca5a5;outline-offset:2px}
 
-/* Hero: two halves. Left = text, right = image */
-.hero{background:#fff;padding:20px 0;min-height:560px;display:flex;align-items:center;overflow:hidden}
-.hero .container{width:100%}
-.hero-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:20px;align-items:center}
-.hero-copy{max-width:520px}
+/* Hero: two halves. Left = text, right = BIGGER image */
+section.hero{position:relative;background:#fff;padding:0;min-height:max(520px,31vw);display:flex;align-items:center;overflow:hidden}
+.hero .container{position:static;flex:1;min-width:0;max-width:none;margin-right:0}
+.hero-grid{display:block}
+.hero-copy{position:relative;z-index:3;width:44%;max-width:640px;padding:30px 0}
+.btn.nav-cta{padding:10px 22px;border-radius:99px;font-size:.9rem;box-shadow:0 8px 20px rgba(220,38,38,.25)}
+.kicker{display:block;font-size:.8rem;letter-spacing:.3em;color:var(--ink);margin-bottom:14px}
+.btn.big{padding:14px 26px;border-radius:99px;font-size:1rem;box-shadow:0 10px 24px rgba(220,38,38,.3)}
+.watch{display:inline-flex;align-items:center;gap:12px;color:var(--ink);font-size:.95rem}
+.watch i{width:46px;height:46px;border-radius:50%;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,.15);display:grid;place-items:center;font-style:normal;font-size:1rem;color:var(--ink);transition:.2s}
+.watch:hover i{transform:scale(1.08)}
 .pill{display:inline-block;background:var(--redsoft);color:var(--red2);border:1px solid #fecaca;padding:5px 14px;border-radius:99px;font-size:.82rem;margin-bottom:14px}
-.hero h1{font-size:clamp(1.9rem,3.6vw,2.8rem);line-height:1.1;color:var(--ink)}
+.hero h1{font-size:clamp(2.1rem,3.8vw,3.5rem);line-height:1.04;color:var(--ink)}
+.hero h1 span{display:block}
 .hero h1 em{font-style:normal;color:var(--red)}
 .hero p{margin:16px 0 24px;max-width:460px;color:var(--muted);font-size:1rem}
 .row{display:flex;gap:12px;flex-wrap:wrap}
@@ -113,24 +121,26 @@ header.scrolled{box-shadow:0 4px 18px rgba(15,23,42,.08)}
 .hero-stats div b{display:block;font-size:1.4rem;color:var(--ink);line-height:1.1}
 .hero-stats div span{font-size:.82rem;color:var(--muted)}
 
-.hero-media{position:relative;width:100%}
-.hero-media>img{display:block;width:100%;height:auto;max-height:540px;object-fit:contain;object-position:right center}
+.hero-media{position:absolute;right:0;top:0;bottom:0;width:70%}
+.hero-media>img{display:block;width:100%;height:100%;object-fit:cover;object-position:right bottom;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 28%);mask-image:linear-gradient(to right,transparent 0,#000 28%)}
+.note{font-family:"Caveat","Segoe Script","Comic Sans MS",cursive;font-weight:700;color:var(--ink);line-height:1.05;font-size:clamp(.95rem,1.6vw,1.45rem);text-align:left}
+.note em{font-style:normal;color:var(--red);border-bottom:3px solid var(--red);border-radius:2px}
 
-/* Hero animated overlay (sits on the image side) */
+/* Hero animated overlay: small, tidy chips placed on empty areas of the image */
 .fx{position:absolute;inset:0;z-index:1;pointer-events:none}
 .fx>*{position:absolute;animation:fxIn .8s ease-out var(--d,0s) both,fxFloat var(--t,5s) ease-in-out calc(var(--d,0s) + .8s) infinite}
-@keyframes fxIn{from{opacity:0;transform:translateY(22px) scale(.9)}to{opacity:1;transform:none}}
-@keyframes fxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.fcard{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.93);border:1px solid #fff;border-radius:12px;padding:8px 14px 8px 10px;box-shadow:0 12px 28px rgba(15,23,42,.13);backdrop-filter:blur(6px)}
-.fcard .fi{width:32px;height:32px;border-radius:9px;background:var(--redsoft);display:grid;place-items:center;font-size:1rem}
-.fcard small{display:block;font-size:.72rem;color:var(--muted);line-height:1.1}
-.fcard b{font-size:1.1rem;color:var(--ink);line-height:1.15}
-.spark{width:40px;height:20px;margin-left:4px}
+@keyframes fxIn{from{opacity:0;transform:translateY(16px) scale(.92)}to{opacity:1;transform:none}}
+@keyframes fxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.fcard{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.95);border:1px solid #fff;border-radius:10px;padding:5px 10px 5px 6px;box-shadow:0 6px 16px rgba(15,23,42,.10);backdrop-filter:blur(6px)}
+.fcard .fi{width:22px;height:22px;border-radius:7px;background:var(--redsoft);display:grid;place-items:center;font-size:.72rem}
+.fcard small{display:block;font-size:.6rem;color:var(--muted);line-height:1.1}
+.fcard b{font-size:.82rem;color:var(--ink);line-height:1.15}
+.spark{width:26px;height:13px;margin-left:2px}
 .spark path{fill:none;stroke:#16a34a;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:80;animation:draw 4s ease-in-out infinite}
 @keyframes draw{0%{stroke-dashoffset:80}55%,100%{stroke-dashoffset:0}}
-.soc{width:44px;height:44px;border-radius:12px;box-shadow:0 10px 24px rgba(15,23,42,.2);background:#fff}
-.soc svg{width:100%;height:100%;display:block;border-radius:12px}
-.ai{width:84px;height:84px;object-fit:cover;border-radius:18px;background:#fff;box-shadow:0 10px 24px rgba(15,23,42,.2)}
+.soc{width:34px;height:30px;border-radius:10px;box-shadow:0 6px 14px rgba(15,23,42,.16);background:#fff}
+.soc svg{width:100%;height:100%;display:block;border-radius:10px}
+.ai{width:56px;height:56px;object-fit:cover;border-radius:14px;box-shadow:0 6px 14px rgba(15,23,42,.16)}
 @media(max-width:900px){.fx{display:none}}
 @media(prefers-reduced-motion:reduce){.fx>*,.fx *{animation:none!important}}
 
@@ -211,9 +221,11 @@ footer{background:var(--alt);border-top:1px solid var(--line);color:var(--muted)
 
 /* Tablet & mobile */
 @media(max-width:900px){
-  .hero-grid{grid-template-columns:1fr}
-  .hero-copy{max-width:none}
-  .hero{min-height:auto}
+  section.hero{display:block;min-height:auto}
+  .hero .container{margin-right:30px}
+  .hero-copy{width:auto;max-width:none}
+  .hero-media{position:relative;width:100%;height:auto}
+  .hero-media>img{height:auto;-webkit-mask-image:none;mask-image:none}
 }
 @media(max-width:800px){
   .menu{display:block}
@@ -256,17 +268,17 @@ function Counter({ to, suffix }) {
   return <b ref={ref}>{v}{suffix}</b>;
 }
 
-// Positions are now relative to the IMAGE side of the hero
+// Social icons: small row on the empty left wall of the image, evenly spaced
 const SOCIALS = [
-  { k: "ig", l: "2%", t: "32%", d: ".5s", tt: "5s", svg: (
+  { k: "ig", l: "12%", t: "36%", d: ".5s", tt: "5s", svg: (
     <svg viewBox="0 0 48 48"><defs><linearGradient id="igrad" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#feda75"/><stop offset=".35" stopColor="#fa7e1e"/><stop offset=".6" stopColor="#d62976"/><stop offset="1" stopColor="#4f5bd5"/></linearGradient></defs><rect width="48" height="48" fill="url(#igrad)"/><rect x="12" y="12" width="24" height="24" rx="7" fill="none" stroke="#fff" strokeWidth="3"/><circle cx="24" cy="24" r="6" fill="none" stroke="#fff" strokeWidth="3"/><circle cx="31.5" cy="16.5" r="1.8" fill="#fff"/></svg>) },
-  { k: "fb", l: "13%", t: "27%", d: ".7s", tt: "6s", svg: (
-    <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#1877f2"/><path d="M26.5 40V26h4.6l.8-5.4h-5.4v-3.5c0-1.6.8-2.8 3-2.8h2.5V9.7c-.5-.1-2.200-.3-4-.3-4.200 0-6.900 2.500-6.900 7v4H16V26h4.100v14z" fill="#fff"/></svg>) },
-  { k: "yt", l: "15%", t: "42%", d: ".9s", tt: "5.5s", svg: (
+  { k: "fb", l: "20%", t: "31%", d: ".7s", tt: "6s", svg: (
+    <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#1877f2"/><path d="M26.5 40V26h4.6l.8-5.4h-5.4v-3.5c0-1.6.8-2.8 3-2.8h2.5V9.7c-.5-.1-2.2-.3-4-.3-4.2 0-6.9 2.5-6.9 7v4H16V26h4.1v14z" fill="#fff"/></svg>) },
+  { k: "yt", l: "24%", t: "46%", d: ".9s", tt: "5.5s", svg: (
     <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#ff0000"/><polygon points="19,15 19,33 34,24" fill="#fff"/></svg>) },
-  { k: "ads", l: "4%", t: "48%", d: "1.1s", tt: "6.5s", svg: (
+  { k: "ads", l: "14%", t: "50%", d: "1.1s", tt: "6.5s", svg: (
     <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#fff"/><path d="M19 9 7 31l7 4 12-22z" fill="#fbbc04"/><path d="M29 9l12 22-7 4-12-22z" fill="#4285f4"/><circle cx="11" cy="37" r="5" fill="#34a853"/></svg>) },
-  { k: "li", l: "12%", t: "58%", d: "1.3s", tt: "5s", svg: (
+  { k: "li", l: "21%", t: "62%", d: "1.3s", tt: "5s", svg: (
     <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#0a66c2"/><text x="24" y="33" fontSize="23" fontWeight="700" fill="#fff" textAnchor="middle" fontFamily="Arial,sans-serif">in</text></svg>) },
 ];
 
@@ -292,20 +304,26 @@ function HeroFX() {
   const Spark = () => <svg className="spark" viewBox="0 0 46 22"><path d="M2 19 L12 12 L20 15 L32 6 L44 2" /></svg>;
   return (
     <div className="fx" aria-hidden="true">
-      <div className="fcard" style={{ left: "2%", top: "4%", "--d": ".2s", "--t": "6s" }}>
+      {/* Top-left: Website Traffic */}
+      <div className="fcard" style={{ left: "40%", top: "5%", "--d": ".2s", "--t": "6s" }}>
         <div className="fi">📈</div><div><small>Website Traffic</small><b><CountUp to={248} prefix="+" suffix="%" /></b></div><Spark />
       </div>
-      <div className="fcard" style={{ right: "3%", top: "2%", "--d": ".4s", "--t": "5.5s" }}>
+      {/* Top-middle/right, above the head: Leads Generated */}
+      <div className="fcard" style={{ right: "15%", top: "4%", "--d": ".4s", "--t": "5.5s" }}>
         <div className="fi">👥</div><div><small>Leads Generated</small><b><CountUp to={320} prefix="+" suffix="%" /></b></div><Spark />
       </div>
-      <div className="fcard" style={{ right: "0%", top: "24%", "--d": ".6s", "--t": "6.5s" }}>
+      {/* Left, under Website Traffic: Revenue Growth */}
+      <div className="fcard" style={{ right: "6%", top: "21%", "--d": ".6s", "--t": "6.5s" }}>
         <div className="fi">💰</div><div><small>Revenue Growth</small><b><CountUp to={4.8} decimals={1} prefix="+" suffix="%" /></b></div><Spark />
       </div>
       {SOCIALS.map((x) => (
         <div key={x.k} className="soc" style={{ left: x.l, top: x.t, "--d": x.d, "--t": x.tt }}>{x.svg}</div>
       ))}
       {/* Video replaces the old "AI" badge */}
-      <video className="ai" src={AI_VIDEO} autoPlay loop muted playsInline style={{ right: "6%", top: "46%", "--d": "1.5s", "--t": "7s" }} />
+      <video className="ai" src={AI_VIDEO} autoPlay loop muted playsInline onError={(e) => { e.currentTarget.style.display = "none"; }} style={{ right: "3%", top: "42%", "--d": "1.5s", "--t": "7s" }} />
+      {/* Handwritten notes */}
+      <div className="note" style={{ left: "33%", top: "20%", "--d": "1.7s", "--t": "6s" }}>Strategy<br />+<br />Creativity<br />=<br /><em>Growth</em></div>
+      <div className="note" style={{ left: "78%", top: "45%", "--d": "1.9s", "--t": "6.5s" }}>Smarter Marketing<br /><em>Better Results</em></div>
     </div>
   );
 }
@@ -346,7 +364,7 @@ export default function App() {
     setLoading(false);
   };
 
-  const nav = [["About", "#about"], ["Services", "#services"], ["Portfolio", "#portfolio"], ["Process", "#process"], ["Reviews", "#reviews"]];
+  const nav = [ ["About", "#about"],["Services", "#services"], ["Portfolio", "#portfolio"], ["Contact", "#contact"],["reviews", "#reviews"]];
   const ticker = [...services, ...services].map((s, i) => <span key={i}>✦ {s.title}</span>);
 
   return (
@@ -357,9 +375,9 @@ export default function App() {
         <div className="container nav">
           <a href="#top" onClick={goHome} className="logo" aria-label={BRAND}><img src={LOGO} alt="" /><span className="divider"></span><span className="lockup"><span className="word">{BRAND}</span><span className="tagline">DIGITAL MARKETING</span></span></a>
           <nav className={"links" + (open ? " open" : "")} onClick={() => setOpen(false)}>
-            <a href="#top" onClick={goHome}>Home</a>
+            <a href="#top" onClick={goHome} className="active">Home</a>
             {nav.map(([t, h]) => <a key={t} href={h}>{t}</a>)}
-            <a href="#contact" className="btn">Get a Free Quote</a>
+            <a href="#contact" className="btn nav-cta">Let's Grow Together →</a>
           </nav>
           <button className="menu" onClick={() => setOpen(!open)} aria-label="Menu">{open ? "✕" : "☰"}</button>
         </div>
@@ -370,21 +388,16 @@ export default function App() {
           <div className="hero-grid">
             {/* LEFT HALF: text */}
             <div className="hero-copy">
-              <span className="pill">🚀 Helping brands grow smarter, faster and stronger</span>
-              <h1>We turn clicks into <em>smart ideas for your brands</em></h1>
-              <p>SEO, social media and performance ads, planned simply and measured clearly. Get more leads without the guesswork.</p>
-              <div className="row">
-                <a href="#contact" className="btn">Unlock Your Growth</a>
-                <a href="#services" className="btn ghost">Our Services</a>
-              </div>
-              <div className="hero-stats">
-                <div><b>+250%</b><span>Organic traffic</span></div>
-                <div><b>3x</b><span>More leads</span></div>
-                <div><b>4.9 ★</b><span>Client rating</span></div>
+              <span className="kicker">DIGITAL MARKETING AGENCY</span>
+              <h1><span>More Traffic</span><span>More Leads</span><span><em>More Revenue</em></span></h1>
+              <p>We turn your ideas into digital success with smart strategies, creative content and AI-powered marketing solutions.</p>
+              <div className="row" style={{ alignItems: "center", gap: 20 }}>
+                <a href="#contact" className="btn big">Grow Your Business →</a>
+                <a href="#portfolio" className="watch"><i>▶</i>Watch Our Story</a>
               </div>
             </div>
 
-            {/* RIGHT HALF: image + animated overlay */}
+            {/* RIGHT HALF: bigger image + small animated overlay */}
             <div className="hero-media">
               <img src={HERO_IMG} alt="Digital marketing professional working on a laptop" />
               <HeroFX />
