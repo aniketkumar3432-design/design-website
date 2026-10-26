@@ -28,7 +28,7 @@ const steps = [
   { n: "04", title: "Optimize", text: "We track results and improve every month." },
 ];
 const results = [
-  { n: 250, suffix: "%", label: "Avg. traffic growth" },
+  { n: 200, suffix: "%", label: "Avg. traffic growth" },
   { n: 3, suffix: "x", label: "More qualified leads" },
   { n: 50, suffix: "+", label: "Projects delivered" },
   { n: 95, suffix: "%", label: "Client retention" },
@@ -53,34 +53,33 @@ const css = `
 html{scroll-behavior:smooth}
 body{font-family:var(--font);font-weight:700;color:var(--text);background:var(--bg);line-height:1.55;font-size:17px}
 input,textarea,select,button{font-family:var(--font);font-weight:700}
-.container{max-width:1160px;margin:0 auto;padding:0 22px}
+.container{max-width:1160px;margin-left:30px;padding:0}
 a{text-decoration:none;color:inherit}
 
 /* Header */
 header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);transition:.3s}
 header.scrolled{box-shadow:0 4px 18px rgba(15,23,42,.08)}
-.nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+.nav{display:flex;align-items:center;justify-content:space-between;height:65px}
 .logo{display:flex;align-items:center;gap:12px}
 .logo img{width:46px;height:46px;border-radius:6px;display:block}
 .divider{width:2px;height:46px;background:var(--red);display:block}
 .lockup{display:flex;flex-direction:column;line-height:1}
 .word{color:var(--red);font-size:1.6rem;letter-spacing:.01em}
 .tagline{color:var(--ink);font-size:.72rem;letter-spacing:.22em;margin-top:6px}
-.links{display:flex;gap:28px;align-items:center}
-.links a:not(.btn){font-size:1rem;color:var(--text);transition:.2s}
+.links{display:flex;gap:28px;align-items:center;position:absolute;right:30px;2s}
 .links a:not(.btn):hover{color:var(--red)}
-.btn{display:inline-block;background:var(--red);color:#fff!important;padding:12px 26px;border-radius:8px;border:1.5px solid var(--red);cursor:pointer;font-size:1rem;transition:.2s}
+.btn{display:inline-block;background:var(--red);color:#fff!important;padding:8px 20px;border-radius:8px;border:1.5px solid var(--red);cursor:pointer;font-size:1rem;transition:.2s}
 .btn:hover{background:var(--red2);border-color:var(--red2);transform:translateY(-2px);box-shadow:0 8px 20px rgba(220,38,38,.28)}
 .btn.ghost{background:#fff;color:var(--ink)!important;border:1.5px solid var(--ink)}
-.btn.ghost:hover{background:var(--ink);color:#fff!important;box-shadow:0 8px 20px rgba(15,23,42,.2)}
+.btn.ghost:hover{background:var(--red2);color:#fff!important;box-shadow:0 8px 20px rgba(38, 146, 37, 0.2);border:none}
 .btn:disabled{opacity:.6;cursor:wait}
 .menu{display:none;background:none;border:0;font-size:1.6rem;cursor:pointer;color:var(--ink)}
 .btn:focus-visible,a:focus-visible,button:focus-visible{outline:3px solid #fca5a5;outline-offset:2px}
 
 /* Hero with background image */
-.hero{
+.hero{  
   position:relative;overflow:hidden;color:var(--ink);
-  min-height:620px;display:flex;align-items:center;padding:70px 0;
+  min-height:620px;display:flex;align-items:center;padding:30px 0;
   background-color:#fff;
   background-image:url('${HERO_IMG}');
   background-repeat:no-repeat;
@@ -93,7 +92,7 @@ header.scrolled{box-shadow:0 4px 18px rgba(15,23,42,.08)}
 }
 .hero .container{position:relative;width:100%}
 .hero-copy{max-width:560px}
-.pill{display:inline-block;background:var(--redsoft);color:var(--red2);border:1px solid #fecaca;padding:6px 16px;border-radius:99px;font-size:.92rem;margin-bottom:20px}
+.pill{display:inline-block;background:var(--redsoft);color:var(--red2);border:1px solid #fecaca;padding:6px 16px;border-radius:99px;font-size:.92rem;margin-bottom:15px}
 .hero h1{font-size:clamp(2.3rem,5vw,3.7rem);line-height:1.08;color:var(--ink)}
 .hero h1 em{font-style:normal;color:var(--red)}
 .hero p{margin:20px 0 30px;max-width:480px;color:var(--muted);font-size:1.15rem}
@@ -159,7 +158,7 @@ h2{font-size:clamp(1.8rem,3.5vw,2.5rem);margin:8px 0 12px;color:var(--ink);line-
 .work p{color:var(--muted);font-size:.98rem}
 
 /* Results */
-.results{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;padding:70px 0}
+.results{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;padding:20px 0}
 .rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;text-align:center}
 .rgrid b{font-size:2.9rem;display:block}
 .rgrid span{opacity:.92}
