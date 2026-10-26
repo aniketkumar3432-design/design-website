@@ -1,0 +1,63 @@
+// Replace the dummy portfolio array with these 3 selected projects.
+const portfolio = [
+  {
+    cat: "Healthcare Campaign",
+    title: "Icon Hospital — Awareness Creative",
+    text: "A bold breast-cancer awareness post combining clear educational messaging, healthcare imagery, and the hospital’s orange-and-teal brand palette.",
+    image: "/portfolio/icon-hospital-awareness.png",
+    alt: "Icon Hospital breast cancer awareness social media design",
+  },
+  {
+    cat: "Food & Beverage",
+    title: "Appam House — Delivery Campaign",
+    text: "A vibrant food-delivery promotion using appetizing product imagery, a clear call to action, and a green visual identity to encourage online orders.",
+    image: "/portfolio/appam-house-delivery.png",
+    alt: "Appam House food delivery promotional design",
+  },
+  {
+    cat: "Restaurant Marketing",
+    title: "Jamie's Burger — Order Online",
+    text: "A high-contrast digital ordering creative featuring a mobile mockup, bold typography, and a playful delivery visual to make ordering feel effortless.",
+    image: "/portfolio/jamies-burger-ordering.png",
+    alt: "Jamie's Burger order online promotional design",
+  },
+];
+
+// Replace the existing Portfolio section's grid with this markup.
+// Keep the outer <section className="alt" id="portfolio"> and its heading.
+<div className="grid g3">
+  {portfolio.map((p) => (
+    <Reveal key={p.title}>
+      <article className="portfolio-card">
+        <div className="portfolio-image">
+          <img src={p.image} alt={p.alt} loading="lazy" />
+        </div>
+        <div className="portfolio-copy">
+          <span>{p.cat}</span>
+          <h3>{p.title}</h3>
+          <p>{p.text}</p>
+        </div>
+      </article>
+    </Reveal>
+  ))}
+</div>
+
+// Add these rules inside the existing css template string.
+.portfolio-card{
+  height:100%;overflow:hidden;background:#fff;border:1px solid var(--line);
+  border-radius:14px;box-shadow:0 2px 10px rgba(15,23,42,.04);
+  transition:transform .25s,box-shadow .25s,border-color .25s;
+}
+.portfolio-card:hover{
+  transform:translateY(-5px);border-color:var(--red);
+  box-shadow:0 16px 34px rgba(220,38,38,.15);
+}
+.portfolio-image{aspect-ratio:4/3;background:#f1f5f9;overflow:hidden}
+.portfolio-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.portfolio-card:hover .portfolio-image img{transform:scale(1.04)}
+.portfolio-copy{padding:20px}
+.portfolio-copy>span{
+  color:var(--red);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase
+}
+.portfolio-copy h3{color:var(--ink);font-size:1.05rem;margin:7px 0}
+.portfolio-copy p{color:var(--muted);font-size:.88rem}

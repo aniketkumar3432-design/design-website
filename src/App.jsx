@@ -3,7 +3,8 @@ import { useState, useEffect, useRef } from "react";
 // ====== EDIT YOUR DETAILS HERE ======
 const BRAND = "ACTIVACORE";
 const LOGO = "/logo.png";
-const HERO_IMG = "/hero.png"; // put your landing image in the public folder with this name
+const HERO_IMG = "/hero.png"; // image shown on the RIGHT side of the hero (public folder)
+const AI_VIDEO = "/ai.mp4";   // the animation that replaces the "AI" badge (public folder)
 const EMAIL = "harikothapalli22@gmail.com";
 const PHONE = "+91 9000875176";
 const WHATSAPP = "+919000875176";
@@ -19,8 +20,30 @@ const services = [
   { icon: "🎨", title: "Graphic Design", text: "Creative visuals, posters, flyers and brochures that communicate your message clearly." },
   { icon: "✨", title: "Logo Design", text: "Unique and memorable logos that reflect your brand and leave a lasting impression." },
 ];
-// Dummy portfolio placeholders: replace with your real projects later
-const portfolio = [1, 2, 3, 4, 5, 6].map((n) => ({ icon: "🖼️", cat: "Category", title: "Project " + String(n).padStart(2, "0") }));
+// Selected portfolio projects from Hari_Designs.pdf
+const portfolio = [
+  {
+    cat: "Healthcare Campaign",
+    title: "Icon Hospital — Awareness Creative",
+    text: "A healthcare awareness design combining clear messaging, medical imagery, and a recognizable orange-and-teal brand palette.",
+    image: "/portfolio/icon-hospital-awareness.png",
+    alt: "Icon Hospital breast cancer awareness campaign",
+  },
+  {
+    cat: "Food & Beverage",
+    title: "Appam House — Delivery Campaign",
+    text: "A vibrant food promotion featuring appetizing visuals, delivery messaging, and a clear call to action to encourage online orders.",
+    image: "/portfolio/appam-house-delivery.png",
+    alt: "Appam House food delivery campaign",
+  },
+  {
+    cat: "Restaurant Marketing",
+    title: "Jamie's Burger — Order Online",
+    text: "A high-contrast ordering campaign featuring a mobile mockup, burger imagery, and a delivery-focused message.",
+    image: "/portfolio/jamies-burger-ordering.png",
+    alt: "Jamie's Burger online ordering campaign",
+  },
+];
 const steps = [
   { n: "01", title: "Discover", text: "We learn your business, audience and goals." },
   { n: "02", title: "Strategy", text: "A clear plan with channels, content and budget." },
@@ -40,8 +63,6 @@ const testimonials = [
 ];
 
 const css = `
-/* Aptos Narrow is a Microsoft font. It is used if installed on the visitor's device;
-   otherwise the similar narrow fonts below load as fallback. */
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
 :root{
   --red:#dc2626;--red2:#b91c1c;--redsoft:#fef2f2;
@@ -51,138 +72,138 @@ const css = `
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--font);font-weight:700;color:var(--text);background:var(--bg);line-height:1.55;font-size:17px}
+body{font-family:var(--font);font-weight:700;color:var(--text);background:var(--bg);line-height:1.5;font-size:15px}
 input,textarea,select,button{font-family:var(--font);font-weight:700}
-.container{max-width:1160px;margin-left:30px;padding:0}
+.container{max-width:1160px;margin-left:30px;margin-right:30px;padding:0}
 a{text-decoration:none;color:inherit}
+section[id]{scroll-margin-top:65px}
 
 /* Header */
 header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);transition:.3s}
 header.scrolled{box-shadow:0 4px 18px rgba(15,23,42,.08)}
-.nav{display:flex;align-items:center;justify-content:space-between;height:65px}
+.nav{display:flex;align-items:center;justify-content:space-between;height:65px;max-width:none}
 .logo{display:flex;align-items:center;gap:12px}
-.logo img{width:46px;height:46px;border-radius:6px;display:block}
-.divider{width:2px;height:46px;background:var(--red);display:block}
+.logo img{width:42px;height:42px;border-radius:6px;display:block}
+.divider{width:2px;height:42px;background:var(--red);display:block}
 .lockup{display:flex;flex-direction:column;line-height:1}
-.word{color:var(--red);font-size:1.6rem;letter-spacing:.01em}
-.tagline{color:var(--ink);font-size:.72rem;letter-spacing:.22em;margin-top:6px}
-.links{display:flex;gap:28px;align-items:center;position:absolute;right:30px;2s}
+.word{color:var(--red);font-size:1.4rem;letter-spacing:.01em}
+.tagline{color:var(--ink);font-size:.65rem;letter-spacing:.22em;margin-top:6px}
+.links{display:flex;gap:26px;align-items:center;font-size:.95rem}
 .links a:not(.btn):hover{color:var(--red)}
-.btn{display:inline-block;background:var(--red);color:#fff!important;padding:8px 20px;border-radius:8px;border:1.5px solid var(--red);cursor:pointer;font-size:1rem;transition:.2s}
+.links a.active{color:var(--red)}
+.btn{display:inline-block;background:var(--red);color:#fff!important;padding:8px 18px;border-radius:8px;border:1.5px solid var(--red);cursor:pointer;font-size:.9rem;transition:.2s}
 .btn:hover{background:var(--red2);border-color:var(--red2);transform:translateY(-2px);box-shadow:0 8px 20px rgba(220,38,38,.28)}
 .btn.ghost{background:#fff;color:var(--ink)!important;border:1.5px solid var(--ink)}
-.btn.ghost:hover{background:var(--red2);color:#fff!important;box-shadow:0 8px 20px rgba(38, 146, 37, 0.2);border:none}
+.btn.ghost:hover{background:var(--red2);color:#fff!important;border-color:var(--red2);box-shadow:0 8px 20px rgba(220,38,38,.2)}
 .btn:disabled{opacity:.6;cursor:wait}
-.menu{display:none;background:none;border:0;font-size:1.6rem;cursor:pointer;color:var(--ink)}
+.menu{display:none;background:none;border:0;font-size:1.5rem;cursor:pointer;color:var(--ink)}
 .btn:focus-visible,a:focus-visible,button:focus-visible{outline:3px solid #fca5a5;outline-offset:2px}
 
-/* Hero with background image */
-.hero{  
-  position:relative;overflow:hidden;color:var(--ink);
-  min-height:620px;display:flex;align-items:center;padding:30px 0;
-  background-color:#fff;
-  background-image:url('${HERO_IMG}');
-  background-repeat:no-repeat;
-  background-size:cover;
-  background-position:right center;
-}
-.hero::before{ /* soft white fade so the text on the left is always readable */
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.92) 32%,rgba(255,255,255,0) 62%);
-}
-.hero .container{position:relative;width:100%}
-.hero-copy{max-width:560px}
-.pill{display:inline-block;background:var(--redsoft);color:var(--red2);border:1px solid #fecaca;padding:6px 16px;border-radius:99px;font-size:.92rem;margin-bottom:15px}
-.hero h1{font-size:clamp(2.3rem,5vw,3.7rem);line-height:1.08;color:var(--ink)}
+/* Hero: two halves. Left = text, right = image */
+.hero{background:#fff;padding:20px 0;min-height:560px;display:flex;align-items:center;overflow:hidden}
+.hero .container{width:100%}
+.hero-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:20px;align-items:center}
+.hero-copy{max-width:520px}
+.pill{display:inline-block;background:var(--redsoft);color:var(--red2);border:1px solid #fecaca;padding:5px 14px;border-radius:99px;font-size:.82rem;margin-bottom:14px}
+.hero h1{font-size:clamp(1.9rem,3.6vw,2.8rem);line-height:1.1;color:var(--ink)}
 .hero h1 em{font-style:normal;color:var(--red)}
-.hero p{margin:20px 0 30px;max-width:480px;color:var(--muted);font-size:1.15rem}
-.row{display:flex;gap:14px;flex-wrap:wrap}
-.hero-stats{display:flex;gap:34px;margin-top:38px;flex-wrap:wrap}
-.hero-stats div b{display:block;font-size:1.8rem;color:var(--ink);line-height:1.1}
-.hero-stats div span{font-size:.92rem;color:var(--muted)}
+.hero p{margin:16px 0 24px;max-width:460px;color:var(--muted);font-size:1rem}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.hero-stats{display:flex;gap:30px;margin-top:30px;flex-wrap:wrap}
+.hero-stats div b{display:block;font-size:1.4rem;color:var(--ink);line-height:1.1}
+.hero-stats div span{font-size:.82rem;color:var(--muted)}
 
-/* Hero animated overlay */
+.hero-media{position:relative;width:100%}
+.hero-media>img{display:block;width:100%;height:auto;max-height:540px;object-fit:contain;object-position:right center}
+
+/* Hero animated overlay (sits on the image side) */
 .fx{position:absolute;inset:0;z-index:1;pointer-events:none}
 .fx>*{position:absolute;animation:fxIn .8s ease-out var(--d,0s) both,fxFloat var(--t,5s) ease-in-out calc(var(--d,0s) + .8s) infinite}
 @keyframes fxIn{from{opacity:0;transform:translateY(22px) scale(.9)}to{opacity:1;transform:none}}
-@keyframes fxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-.fcard{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.93);border:1px solid #fff;border-radius:14px;padding:11px 18px 11px 12px;box-shadow:0 14px 32px rgba(15,23,42,.13);backdrop-filter:blur(6px)}
-.fcard .fi{width:38px;height:38px;border-radius:10px;background:var(--redsoft);display:grid;place-items:center;font-size:1.15rem}
-.fcard small{display:block;font-size:.82rem;color:var(--muted);line-height:1.1}
-.fcard b{font-size:1.4rem;color:var(--ink);line-height:1.15}
-.fcard b i{font-style:normal;color:#16a34a;font-size:.9rem;margin-left:5px}
-.spark{width:46px;height:22px;margin-left:4px}
+@keyframes fxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.fcard{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.93);border:1px solid #fff;border-radius:12px;padding:8px 14px 8px 10px;box-shadow:0 12px 28px rgba(15,23,42,.13);backdrop-filter:blur(6px)}
+.fcard .fi{width:32px;height:32px;border-radius:9px;background:var(--redsoft);display:grid;place-items:center;font-size:1rem}
+.fcard small{display:block;font-size:.72rem;color:var(--muted);line-height:1.1}
+.fcard b{font-size:1.1rem;color:var(--ink);line-height:1.15}
+.spark{width:40px;height:20px;margin-left:4px}
 .spark path{fill:none;stroke:#16a34a;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:80;animation:draw 4s ease-in-out infinite}
 @keyframes draw{0%{stroke-dashoffset:80}55%,100%{stroke-dashoffset:0}}
-.soc{width:54px;height:54px;border-radius:14px;box-shadow:0 10px 24px rgba(15,23,42,.2);background:#fff}
-.soc svg{width:100%;height:100%;display:block;border-radius:14px}
-.ai{width:72px;height:72px;display:grid;place-items:center}
-.ai .ring{position:absolute;inset:0;border:2px dashed var(--red);border-radius:50%;opacity:.7;animation:spin 14s linear infinite}
-.ai .core{width:52px;height:52px;border-radius:14px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:1.3rem;animation:pulse 2.4s infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(220,38,38,.5)}70%{box-shadow:0 0 0 18px rgba(220,38,38,0)}100%{box-shadow:0 0 0 0 rgba(220,38,38,0)}}
+.soc{width:44px;height:44px;border-radius:12px;box-shadow:0 10px 24px rgba(15,23,42,.2);background:#fff}
+.soc svg{width:100%;height:100%;display:block;border-radius:12px}
+.ai{width:84px;height:84px;object-fit:cover;border-radius:18px;background:#fff;box-shadow:0 10px 24px rgba(15,23,42,.2)}
 @media(max-width:900px){.fx{display:none}}
 @media(prefers-reduced-motion:reduce){.fx>*,.fx *{animation:none!important}}
 
 /* Marquee */
-.marquee{background:var(--redsoft);color:var(--red2);overflow:hidden;white-space:nowrap;padding:15px 0;font-size:.95rem;border-top:1px solid #fecaca;border-bottom:1px solid #fecaca}
+.marquee{background:var(--redsoft);color:var(--red2);overflow:hidden;white-space:nowrap;padding:12px 0;font-size:.85rem;border-top:1px solid #fecaca;border-bottom:1px solid #fecaca}
 .marquee div{display:inline-block;animation:scroll 28s linear infinite}
-.marquee span{margin:0 28px}
+.marquee span{margin:0 26px}
 @keyframes scroll{to{transform:translateX(-50%)}}
 
 /* Sections */
-section{padding:90px 0}
+section{padding:76px 0}
 .alt{background:var(--alt)}
-.tag{color:var(--red);font-size:.9rem;letter-spacing:.08em;text-transform:uppercase}
-h2{font-size:clamp(1.8rem,3.5vw,2.5rem);margin:8px 0 12px;color:var(--ink);line-height:1.15}
-.sub{color:var(--muted);max-width:560px;margin-bottom:44px}
-.grid{display:grid;gap:22px}
-.g3{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
-.g4{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-.card{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:30px;transition:.25s;box-shadow:0 2px 10px rgba(15,23,42,.04)}
+.tag{color:var(--red);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
+h2{font-size:clamp(1.5rem,2.8vw,2rem);margin:8px 0 12px;color:var(--ink);line-height:1.15}
+.sub{color:var(--muted);max-width:560px;margin-bottom:38px}
+.grid{display:grid;gap:20px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px;transition:.25s;box-shadow:0 2px 10px rgba(15,23,42,.04)}
 .card:hover{transform:translateY(-5px);box-shadow:0 16px 34px rgba(15,23,42,.1);border-color:var(--red)}
-.card h3{margin-bottom:6px;color:var(--ink)}
-.card p{color:var(--muted);font-size:1rem}
-.step b{font-size:2.2rem;color:var(--red)}
+.card h3{margin-bottom:6px;color:var(--ink);font-size:1.05rem}
+.card p{color:var(--muted);font-size:.92rem}
+.step b{font-size:1.9rem;color:var(--red)}
 
 /* About */
 .about{background:linear-gradient(180deg,#fff,var(--alt))}
-.about p.txt{color:var(--text);max-width:780px;font-size:1.15rem}
+.about p.txt{color:var(--text);max-width:780px;font-size:1rem}
 
 /* Service / portfolio cards */
-.work{position:relative;min-height:240px;border-radius:14px;display:flex;flex-direction:column;justify-content:flex-end;padding:22px;border:1px solid var(--line);background:linear-gradient(160deg,#fff,var(--redsoft));transition:.25s;overflow:hidden;height:100%;box-shadow:0 2px 10px rgba(15,23,42,.04)}
+.work{position:relative;min-height:210px;border-radius:14px;display:flex;flex-direction:column;justify-content:flex-end;padding:20px;border:1px solid var(--line);background:linear-gradient(160deg,#fff,var(--redsoft));transition:.25s;overflow:hidden;height:100%;box-shadow:0 2px 10px rgba(15,23,42,.04)}
 .work:hover{transform:translateY(-5px);border-color:var(--red);box-shadow:0 16px 34px rgba(220,38,38,.15)}
-.work .ic{position:absolute;top:18px;right:20px;font-size:2.4rem}
-.work span{color:var(--red);font-size:.85rem;letter-spacing:.08em;text-transform:uppercase}
-.work h3{color:var(--ink);margin-bottom:6px}
-.work p{color:var(--muted);font-size:.98rem}
+.work .ic{position:absolute;top:16px;right:18px;font-size:2rem}
+.work span{color:var(--red);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}
+.work h3{color:var(--ink);margin-bottom:6px;font-size:1.05rem}
+.work p{color:var(--muted);font-size:.88rem}
+
+/* Portfolio cards */
+.portfolio-card{height:100%;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 10px rgba(15,23,42,.04);transition:transform .25s,box-shadow .25s,border-color .25s}
+.portfolio-card:hover{transform:translateY(-5px);border-color:var(--red);box-shadow:0 16px 34px rgba(220,38,38,.15)}
+.portfolio-image{aspect-ratio:4/3;overflow:hidden;background:#f1f5f9}
+.portfolio-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.portfolio-card:hover .portfolio-image img{transform:scale(1.04)}
+.portfolio-copy{padding:20px}
+.portfolio-copy>span{color:var(--red);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}
+.portfolio-copy h3{color:var(--ink);font-size:1.05rem;margin:7px 0}
+.portfolio-copy p{color:var(--muted);font-size:.88rem}
 
 /* Results */
 .results{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;padding:20px 0}
 .rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;text-align:center}
-.rgrid b{font-size:2.9rem;display:block}
-.rgrid span{opacity:.92}
+.rgrid b{font-size:2.2rem;display:block}
+.rgrid span{opacity:.92;font-size:.9rem}
 .stars{color:#f59e0b;margin-bottom:10px}
 
 /* CTA */
-.cta{background:var(--redsoft);border:1px solid #fecaca;color:var(--ink);text-align:center;border-radius:20px;padding:60px 24px}
-.cta p{color:var(--muted);margin:0 auto 26px;max-width:480px}
+.cta{background:var(--redsoft);border:1px solid #fecaca;color:var(--ink);text-align:center;border-radius:20px;padding:50px 24px}
+.cta p{color:var(--muted);margin:0 auto 22px;max-width:480px}
 
 /* Contact */
 .contact{display:grid;grid-template-columns:1fr 1fr;gap:50px}
 .info p{margin:8px 0;color:var(--muted)}
-form{display:grid;gap:14px;background:#fff;border:1px solid var(--line);padding:28px;border-radius:14px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
-input,textarea,select{padding:13px 14px;border:1px solid #cbd5e1;border-radius:8px;font-size:1rem;width:100%;background:#fff;color:var(--ink)}
+form{display:grid;gap:12px;background:#fff;border:1px solid var(--line);padding:24px;border-radius:14px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+input,textarea,select{padding:11px 13px;border:1px solid #cbd5e1;border-radius:8px;font-size:.92rem;width:100%;background:#fff;color:var(--ink)}
 input::placeholder,textarea::placeholder{color:#94a3b8}
 input:focus,textarea:focus,select:focus{outline:2px solid var(--red);border-color:transparent}
 .hp{position:absolute;left:-9999px}
 .ok{background:#dcfce7;color:#166534;padding:22px;border-radius:12px}
-.err{color:var(--red2);font-size:.95rem}
+.err{color:var(--red2);font-size:.88rem}
 
 /* Footer */
-footer{background:var(--alt);border-top:1px solid var(--line);color:var(--muted);padding:34px 0;font-size:.95rem}
+footer{background:var(--alt);border-top:1px solid var(--line);color:var(--muted);padding:30px 0;font-size:.85rem}
 .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
-.wa{position:fixed;right:20px;bottom:20px;width:56px;height:56px;border-radius:50%;background:#25d366;display:grid;place-items:center;font-size:1.7rem;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:30;transition:.2s}
+.wa{position:fixed;right:20px;bottom:20px;width:52px;height:52px;border-radius:50%;background:#25d366;display:grid;place-items:center;font-size:1.5rem;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:30;transition:.2s}
 .wa:hover{transform:scale(1.1)}
 .rv{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
 .rv.in{opacity:1;transform:none}
@@ -190,18 +211,17 @@ footer{background:var(--alt);border-top:1px solid var(--line);color:var(--muted)
 
 /* Tablet & mobile */
 @media(max-width:900px){
-  .hero{background-position:70% bottom}
-  .hero::before{background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.94) 45%,rgba(255,255,255,0) 80%)}
+  .hero-grid{grid-template-columns:1fr}
+  .hero-copy{max-width:none}
+  .hero{min-height:auto}
 }
 @media(max-width:800px){
   .menu{display:block}
-  .links{display:none;position:absolute;top:72px;left:0;right:0;background:#fff;flex-direction:column;padding:22px;border-bottom:1px solid var(--line);box-shadow:0 12px 24px rgba(15,23,42,.08)}
+  .links{display:none;position:absolute;top:65px;left:0;right:0;background:#fff;flex-direction:column;padding:22px;border-bottom:1px solid var(--line);box-shadow:0 12px 24px rgba(15,23,42,.08)}
   .links.open{display:flex}
   .contact{grid-template-columns:1fr}
-  .hero{min-height:auto;align-items:flex-start;padding:48px 0 300px;background-size:auto 340px;background-position:right bottom}
-  .hero p{margin:16px 0 24px}
-  .hero-stats{gap:24px;margin-top:28px}
-  section{padding:64px 0}
+  .hero-stats{gap:24px;margin-top:24px}
+  section{padding:56px 0}
 }`;
 
 function Reveal({ children, className = "" }) {
@@ -236,16 +256,17 @@ function Counter({ to, suffix }) {
   return <b ref={ref}>{v}{suffix}</b>;
 }
 
+// Positions are now relative to the IMAGE side of the hero
 const SOCIALS = [
-  { k: "ig", l: "48%", t: "30%", d: ".5s", tt: "5s", svg: (
+  { k: "ig", l: "2%", t: "32%", d: ".5s", tt: "5s", svg: (
     <svg viewBox="0 0 48 48"><defs><linearGradient id="igrad" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#feda75"/><stop offset=".35" stopColor="#fa7e1e"/><stop offset=".6" stopColor="#d62976"/><stop offset="1" stopColor="#4f5bd5"/></linearGradient></defs><rect width="48" height="48" fill="url(#igrad)"/><rect x="12" y="12" width="24" height="24" rx="7" fill="none" stroke="#fff" strokeWidth="3"/><circle cx="24" cy="24" r="6" fill="none" stroke="#fff" strokeWidth="3"/><circle cx="31.5" cy="16.5" r="1.8" fill="#fff"/></svg>) },
-  { k: "fb", l: "53%", t: "23%", d: ".7s", tt: "6s", svg: (
+  { k: "fb", l: "13%", t: "27%", d: ".7s", tt: "6s", svg: (
     <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#1877f2"/><path d="M26.5 40V26h4.6l.8-5.4h-5.4v-3.5c0-1.6.8-2.8 3-2.8h2.5V9.7c-.5-.1-2.200-.3-4-.3-4.200 0-6.900 2.500-6.900 7v4H16V26h4.100v14z" fill="#fff"/></svg>) },
-  { k: "yt", l: "56%", t: "38%", d: ".9s", tt: "5.5s", svg: (
+  { k: "yt", l: "15%", t: "42%", d: ".9s", tt: "5.5s", svg: (
     <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#ff0000"/><polygon points="19,15 19,33 34,24" fill="#fff"/></svg>) },
-  { k: "ads", l: "49%", t: "44%", d: "1.1s", tt: "6.5s", svg: (
+  { k: "ads", l: "4%", t: "48%", d: "1.1s", tt: "6.5s", svg: (
     <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#fff"/><path d="M19 9 7 31l7 4 12-22z" fill="#fbbc04"/><path d="M29 9l12 22-7 4-12-22z" fill="#4285f4"/><circle cx="11" cy="37" r="5" fill="#34a853"/></svg>) },
-  { k: "li", l: "53%", t: "52%", d: "1.3s", tt: "5s", svg: (
+  { k: "li", l: "12%", t: "58%", d: "1.3s", tt: "5s", svg: (
     <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#0a66c2"/><text x="24" y="33" fontSize="23" fontWeight="700" fill="#fff" textAnchor="middle" fontFamily="Arial,sans-serif">in</text></svg>) },
 ];
 
@@ -271,21 +292,20 @@ function HeroFX() {
   const Spark = () => <svg className="spark" viewBox="0 0 46 22"><path d="M2 19 L12 12 L20 15 L32 6 L44 2" /></svg>;
   return (
     <div className="fx" aria-hidden="true">
-      <div className="fcard" style={{ left: "50%", top: "7%", "--d": ".2s", "--t": "6s" }}>
+      <div className="fcard" style={{ left: "2%", top: "4%", "--d": ".2s", "--t": "6s" }}>
         <div className="fi">📈</div><div><small>Website Traffic</small><b><CountUp to={248} prefix="+" suffix="%" /></b></div><Spark />
       </div>
-      <div className="fcard" style={{ right: "12%", top: "9%", "--d": ".4s", "--t": "5.5s" }}>
+      <div className="fcard" style={{ right: "3%", top: "2%", "--d": ".4s", "--t": "5.5s" }}>
         <div className="fi">👥</div><div><small>Leads Generated</small><b><CountUp to={320} prefix="+" suffix="%" /></b></div><Spark />
       </div>
-      <div className="fcard" style={{ right: "2%", top: "27%", "--d": ".6s", "--t": "6.5s" }}>
+      <div className="fcard" style={{ right: "0%", top: "24%", "--d": ".6s", "--t": "6.5s" }}>
         <div className="fi">💰</div><div><small>Revenue Growth</small><b><CountUp to={4.8} decimals={1} prefix="+" suffix="%" /></b></div><Spark />
       </div>
       {SOCIALS.map((x) => (
         <div key={x.k} className="soc" style={{ left: x.l, top: x.t, "--d": x.d, "--t": x.tt }}>{x.svg}</div>
       ))}
-      <div className="ai" style={{ right: "9%", top: "45%", "--d": "1.5s", "--t": "7s" }}>
-        <span className="ring"></span><span className="core">AI</span>
-      </div>
+      {/* Video replaces the old "AI" badge */}
+      <video className="ai" src={AI_VIDEO} autoPlay loop muted playsInline style={{ right: "6%", top: "46%", "--d": "1.5s", "--t": "7s" }} />
     </div>
   );
 }
@@ -304,6 +324,12 @@ export default function App() {
     return () => window.removeEventListener("scroll", f);
   }, []);
 
+  // Home: do nothing if already at the top, otherwise scroll smoothly to the very top
+  const goHome = (e) => {
+    e.preventDefault();
+    if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const change = (e) => setForm({ ...form, [e.target.name]: e.target.value });
   const submit = async (e) => {
     e.preventDefault();
@@ -320,7 +346,7 @@ export default function App() {
     setLoading(false);
   };
 
-  const nav = [["Home", "#top"], ["About", "#about"], ["Services", "#services"], ["Portfolio", "#portfolio"], ["Process", "#process"], ["Reviews", "#reviews"]];
+  const nav = [["About", "#about"], ["Services", "#services"], ["Portfolio", "#portfolio"], ["Process", "#process"], ["Reviews", "#reviews"]];
   const ticker = [...services, ...services].map((s, i) => <span key={i}>✦ {s.title}</span>);
 
   return (
@@ -329,8 +355,9 @@ export default function App() {
 
       <header className={scrolled ? "scrolled" : ""}>
         <div className="container nav">
-          <a href="#top" className="logo" aria-label={BRAND}><img src={LOGO} alt="" /><span className="divider"></span><span className="lockup"><span className="word">{BRAND}</span><span className="tagline">DIGITAL MARKETING</span></span></a>
+          <a href="#top" onClick={goHome} className="logo" aria-label={BRAND}><img src={LOGO} alt="" /><span className="divider"></span><span className="lockup"><span className="word">{BRAND}</span><span className="tagline">DIGITAL MARKETING</span></span></a>
           <nav className={"links" + (open ? " open" : "")} onClick={() => setOpen(false)}>
+            <a href="#top" onClick={goHome}>Home</a>
             {nav.map(([t, h]) => <a key={t} href={h}>{t}</a>)}
             <a href="#contact" className="btn">Get a Free Quote</a>
           </nav>
@@ -339,20 +366,28 @@ export default function App() {
       </header>
 
       <section className="hero" id="top">
-        <HeroFX />
         <div className="container">
-          <div className="hero-copy">
-            <span className="pill">🚀 Helping brands grow smarter, faster and stronger</span>
-            <h1>We turn clicks into <em>smart ideas for your brands</em></h1>
-            <p>SEO, social media and performance ads, planned simply and measured clearly. Get more leads without the guesswork.</p>
-            <div className="row">
-              <a href="#contact" className="btn">Unlock Your Growth</a>
-              <a href="#services" className="btn ghost">Our Services</a>
+          <div className="hero-grid">
+            {/* LEFT HALF: text */}
+            <div className="hero-copy">
+              <span className="pill">🚀 Helping brands grow smarter, faster and stronger</span>
+              <h1>We turn clicks into <em>smart ideas for your brands</em></h1>
+              <p>SEO, social media and performance ads, planned simply and measured clearly. Get more leads without the guesswork.</p>
+              <div className="row">
+                <a href="#contact" className="btn">Unlock Your Growth</a>
+                <a href="#services" className="btn ghost">Our Services</a>
+              </div>
+              <div className="hero-stats">
+                <div><b>+250%</b><span>Organic traffic</span></div>
+                <div><b>3x</b><span>More leads</span></div>
+                <div><b>4.9 ★</b><span>Client rating</span></div>
+              </div>
             </div>
-            <div className="hero-stats">
-              <div><b>+250%</b><span>Organic traffic</span></div>
-              <div><b>3x</b><span>More leads</span></div>
-              <div><b>4.9 ★</b><span>Client rating</span></div>
+
+            {/* RIGHT HALF: image + animated overlay */}
+            <div className="hero-media">
+              <img src={HERO_IMG} alt="Digital marketing professional working on a laptop" />
+              <HeroFX />
             </div>
           </div>
         </div>
@@ -390,9 +425,18 @@ export default function App() {
             <p className="sub">A glimpse of the creatives, campaigns and designs we have delivered.</p></Reveal>
           <div className="grid g3">
             {portfolio.map((p) => (
-              <Reveal key={p.title}><div className="work">
-                <div className="ic">{p.icon}</div><span>{p.cat}</span><h3>{p.title}</h3>
-              </div></Reveal>
+              <Reveal key={p.title}>
+                <article className="portfolio-card">
+                  <div className="portfolio-image">
+                    <img src={p.image} alt={p.alt} loading="lazy" />
+                  </div>
+                  <div className="portfolio-copy">
+                    <span>{p.cat}</span>
+                    <h3>{p.title}</h3>
+                    <p>{p.text}</p>
+                  </div>
+                </article>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -424,8 +468,8 @@ export default function App() {
             {testimonials.map((t, i) => (
               <Reveal key={i}><div className="card">
                 <div className="stars">★★★★★</div><p>“{t.text}”</p>
-                <h3 style={{ marginTop: 14, fontSize: "1rem" }}>{t.name}</h3>
-                <p style={{ fontSize: ".9rem" }}>{t.role}</p>
+                <h3 style={{ marginTop: 14, fontSize: ".95rem" }}>{t.name}</h3>
+                <p style={{ fontSize: ".82rem" }}>{t.role}</p>
               </div></Reveal>
             ))}
           </div>
