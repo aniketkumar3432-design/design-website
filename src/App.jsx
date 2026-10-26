@@ -364,7 +364,7 @@ export default function App() {
     setLoading(false);
   };
 
-  const nav = [ ["About", "#about"],["Services", "#services"], ["Portfolio", "#portfolio"], ["Contact", "#contact"],["reviews", "#reviews"]];
+  const nav = [ ["About", "#about"],["Services", "#services"], ["Portfolio", "#portfolio"], ["Contact", "#contact"],["Reviews", "#reviews"]];
   const ticker = [...services, ...services].map((s, i) => <span key={i}>✦ {s.title}</span>);
 
   return (
@@ -388,12 +388,17 @@ export default function App() {
           <div className="hero-grid">
             {/* LEFT HALF: text */}
             <div className="hero-copy">
-              <span className="kicker">DIGITAL MARKETING AGENCY</span>
-              <h1><span>More Traffic</span><span>More Leads</span><span><em>More Revenue</em></span></h1>
-              <p>We turn your ideas into digital success with smart strategies, creative content and AI-powered marketing solutions.</p>
-              <div className="row" style={{ alignItems: "center", gap: 20 }}>
-                <a href="#contact" className="btn big">Grow Your Business →</a>
-                <a href="#portfolio" className="watch"><i>▶</i>Watch Our Story</a>
+              <span className="pill">🚀 Helping brands grow smarter, faster and stronger</span>
+              <h1>We Turn Clicks Into <em>Smart Ideas For Your Brands</em></h1>
+              <p>SEO, social media and performance ads, planned simply and measured clearly. Get more leads without the guesswork.</p>
+              <div className="row">
+                <a href="#contact" className="btn">Unlock Your Growth</a>
+                <a href="#services" className="btn ghost">Our Services</a>
+              </div>
+              <div className="hero-stats">
+                <div><b>+250%</b><span>Organic traffic</span></div>
+                <div><b>3x</b><span>More leads</span></div>
+                <div><b>4.9 ★</b><span>Client rating</span></div>
               </div>
             </div>
 
