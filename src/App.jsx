@@ -189,7 +189,7 @@ h2{font-size:clamp(1.5rem,2.8vw,2rem);margin:8px 0 12px;color:var(--ink);line-he
 .portfolio-copy p{color:var(--muted);font-size:.88rem}
 
 /* Results */
-.results{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;padding:20px 0}
+.results{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;padding:10px 0}
 .rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;text-align:center}
 .rgrid b{font-size:2.2rem;display:block}
 .rgrid span{opacity:.92;font-size:.9rem}
